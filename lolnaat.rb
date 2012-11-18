@@ -7,7 +7,7 @@ require 'open-uri'
 require 'flowdock'
 require 'json'
 
-env = File.open("./.env.yaml") { |f| YAML.load(f) }
+env = File.open("./.env") { |f| YAML.load(f) }
 puts env.inspect
 
 today = Time.now.strftime("%w")
