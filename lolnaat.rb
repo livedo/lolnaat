@@ -8,7 +8,6 @@ require 'flowdock'
 require 'json'
 
 env = File.open("./.env") { |f| YAML.load(f) }
-puts env.inspect
 
 today = Time.now.strftime("%w")
 quit 0 if [0,6].include?(today.to_i)
