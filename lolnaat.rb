@@ -11,23 +11,22 @@ env = File.open("./.env") { |f| YAML.load(f) }
 
 today = Time.now.strftime("%w")
 quit 0 if [0,6].include?(today.to_i)
-lunchmenu = Nokogiri::HTML(open("http://www.ravintola-macondo.com/")).css("#lounaat > tr:nth-child(#{today})")
-lunchmenu = "<table>#{lunchmenu}</table>"
-alacarte = Nokogiri::HTML(open("http://www.ravintola-macondo.com/muut%20lounaat")).css("#muut-lounaat")
-blancco = Nokogiri::HTML(open("http://www.ravintolablancco.com")).css(".lounas > div > div:nth-child(3)")
+blancco = Nokogiri::HTML(open("http://www.ravintolablancco.com")).css(".lounas > div > h3")
 
 begin
         dylan = open("https://www.facebook.com/feeds/page.php?id=171106726298873&format=json", {'User-Agent' => 'Mozilla'}) do |f|
                 JSON.parse(f.read.to_s)["entries"][0]["content"]
         end
+        lunchmenu = open("https://www.facebook.com/feeds/page.php?id=471456039557816&format=json", {'User-Agent' => 'Mozilla'}) do |f|
+                JSON.parse(f.read.to_s)["entries"][0]["content"]
+        end
+
 rescue OpenURI::HTTPError => ex
         dylan = "Facebook bork'n"
 end
 
-lunchmenu = "<h1>MaCondo</h1> " +
+lunchmenu = "<h1>West Beverly</h1> " +
                 lunchmenu.to_s +
-                "<br><h2>A la carte</h2>" +
-                alacarte.to_s +
                 "<br><br> <h1>Blancco</h1>" +
                 blancco.to_s +
                 "<br><br><h1>Dylan Pink</h1><p>" + dylan + "</p>" +
@@ -39,7 +38,7 @@ flow = Flowdock::Flow.new(
   :api_token => env["flowdock_api_token"],
   :source => "Lounasmaatti",
   :from => {
-    :name => "Macondo",
+    :name => "Lolnaat",
     :address => env["from_address"]
   },
   :external_user_name => "Lounasmaatti"
